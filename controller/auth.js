@@ -10,6 +10,25 @@ const register = async (req, res) => {
         const username = req.body.username
         const password = req.body.password
 
+        const getUserEmail = await user.findByEmail(email)
+        const getUserUsername = await user.findByUsername(username)
+
+        if (getUserEmail) {
+            res.status(400).json({
+                status_code: 400,
+                message: 'email already used'
+            })
+            return
+        }
+
+        if (getUserUsername) {
+            res.status(400).json({
+                status_code: 400,
+                message: 'username already used'
+            })
+            return
+        }
+
         if (fullname === '') {
             res.status(400).json({
                 status_code: 400,
@@ -67,7 +86,7 @@ const register = async (req, res) => {
         if (!validatePassword) {
             res.status(400).json({
                 status_code: 400,
-                message: 'password must contain at least one uppercase letter, one lowercase letter, and one number.'
+                message: 'password must contain at least one uppercase letter, one lowercase letter, and a number.'
             })
             return
         }
@@ -108,12 +127,11 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    console.log(req.session)
     try {
         const username = req.body.username
         const password = req.body.password
 
-        const findUser = await user.findByUsername(username)
+        const findUser = await user.findByUsername(username, null)
 
         if (!findUser) {
             res.status(404).json({

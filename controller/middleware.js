@@ -17,6 +17,7 @@ const checkAuth = async (req, res, next) => {
                 return
             } else {
                 req.user = decode
+                req.userId = decode.id
                 next()
             }
         })
@@ -51,7 +52,7 @@ const checkAdmin = async (req, res, next) => {
                     if (!findUser) {
                         res.status(404).json({
                             status_code: 404,
-                            message: findUser.id,
+                            message: 'user not found',
                         })
                         return
                     }
@@ -105,7 +106,7 @@ const checkPremium = async (req, res, next) => {
                     if (!findUser) {
                         res.status(404).json({
                             status_code: 404,
-                            message: findUser.id,
+                            message: 'user not found',
                         })
                         return
                     }
