@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const users = require('./controller/users')
+const board = require('./controller/board')
 const auth = require('./controller/auth')
 const middleware = require('./controller/middleware')
 
@@ -27,5 +28,13 @@ router.post('/changePassword', middleware.checkAuth, users.changePassword) // us
 router.delete('/deleteUser', middleware.checkAuth, users.deleteUser) // users
 router.delete('/softDeleteUser/:id', middleware.checkAdmin, users.deleteByAdmin) // admin
 router.post('/recoverUser/:id', middleware.checkAdmin, users.recoverUser) // admin
+
+// board
+router.post('/createBoard', middleware.checkAuth, board.createBoard) // users
+router.get('/board', middleware.checkAuth, board.getAllBoardByUser) // users
+router.get('/board/:id', middleware.checkAuth, board.getBoardById) // users
+router.post('/updateBoard/:id', middleware.checkAuth, board.updateBoard) // users
+router.post('/updateMemberBoard/:id', middleware.checkAuth, board.updateBoardMember) // user
+router.delete('/deleteBoard/:id', middleware.checkAuth, board.deleteBoard) // user
 
 module.exports = router
